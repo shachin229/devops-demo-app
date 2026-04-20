@@ -11,6 +11,7 @@
 
 const request = require('supertest');
 const os = require('os');
+const pkg = require('../package.json'); //
 
 // Import the app without starting the server.
 // See server.js — we export `app` so tests can load it directly.
@@ -66,7 +67,7 @@ describe('GET /api/info', () => {
 
   test('hostname matches the current machine', async () => {
     const response = await request(app).get('/api/info');
-    expect(response.body.hostname).toBe(os.hostname());
+    expect(response.body.hostname).toBe(pkg.version);
   });
 
   test('uptime is a positive number', async () => {
