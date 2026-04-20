@@ -59,9 +59,7 @@ jobs:
 
       # Step 5: SSH into the Droplet and restart the application
       # - Install/update dependencies on the server
-      # - Kill any existing instance of the app
-      # - Start the app in the background
-      # - Verify the health endpoint responds with "OK"
+      # - Restart via systemd (no backgrounding tricks needed)
       - name: Restart application
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -70,16 +68,13 @@ jobs:
           password: ${{ secrets.DROPLET_PASSWORD }}
           script: |
             cd /opt/devops-demo-app
-            npm install --production
-            # Stop any running instance (|| true prevents failure if none running)
-            pkill -f "node server.js" || true
-            # Wait for the process to fully stop
-            sleep 2
-            # Start the app fully detached from this SSH session.
-            # setsid creates a new session so the process survives SSH teardown.
-            # </dev/null closes stdin so the SSH channel can close cleanly.
-            setsid node server.js > deploy.log 2>&1 </dev/null &
-            # Wait for the server to start
-            sleep 3
-            # Verify the health endpoint
-            curl -sf http://localhost:3000/health && echo " — Deploy successful!" || echo " — WARNING: Health check failed!"
+            npm install --omit=dev
+            systemctl restart devops-demo-app
+
+      # Step 6: Verify the health endpoint from the GitHub runner.
+      # This runs OUTSIDE the SSH session, avoiding the SIGTERM issue.
+      # We give the app a few seconds to fully start before checking.
+      - name: Verify health endpoint
+        run: |
+          sleep 5
+          curl -sf http://${{ secrets.DROPLET_IP }}:3000/health && echo " — Deploy successful!" || (echo " — Health check failed!" && exit 1)
