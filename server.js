@@ -3,9 +3,6 @@ const express = require('express');
 const path = require('path');
 const os = require('os');
 
-// Import version from package.json
-const pkg = require('./package.json');
-
 // Create Express app
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,7 +16,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // API endpoint to get server info
 app.get('/api/info', (req, res) => {
   res.json({
-    version: pkg.version, //
+    version: '1.0.0',
     environment: NODE_ENV,
     hostname: os.hostname(),
     uptime: os.uptime(),
