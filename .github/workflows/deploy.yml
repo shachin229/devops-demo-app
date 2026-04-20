@@ -68,7 +68,7 @@ jobs:
           host: ${{ secrets.DROPLET_IP }}
           username: root
           password: ${{ secrets.DROPLET_PASSWORD }}
-          script: |
+          script: 
             cd /opt/devops-demo-app
             npm install --omit=dev
             # Stop any running instance (|| true prevents failure if none running)
@@ -80,6 +80,6 @@ jobs:
             # </dev/null closes stdin so the SSH channel can close cleanly.
             setsid node server.js > deploy.log 2>&1 </dev/null &
             # Wait for the server to start
-            sleep 10
+            sleep 3
             # Verify the health endpoint
             curl -sf http://localhost:3000/health && echo " — Deploy successful!" || echo " — WARNING: Health check failed!"
