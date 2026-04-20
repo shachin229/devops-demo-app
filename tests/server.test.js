@@ -62,12 +62,12 @@ describe('GET /api/info', () => {
 
   test('version matches package.json', async () => {
     const response = await request(app).get('/api/info');
-    expect(response.body.version).toBe('1.0.0');
+    expect(response.body.version).toBe(pkg.version);
   });
 
   test('hostname matches the current machine', async () => {
     const response = await request(app).get('/api/info');
-    expect(response.body.hostname).toBe(pkg.version);
+    expect(response.body.hostname).toBe(os.hostname());
   });
 
   test('uptime is a positive number', async () => {
