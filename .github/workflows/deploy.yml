@@ -70,7 +70,7 @@ jobs:
           password: ${{ secrets.DROPLET_PASSWORD }}
           script: |
             cd /opt/devops-demo-app
-            npm install --omit=dev
+            npm install --production
             # Stop any running instance (|| true prevents failure if none running)
             pkill -f "node server.js" || true
             # Wait for the process to fully stop
