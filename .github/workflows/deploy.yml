@@ -68,7 +68,7 @@ jobs:
           host: ${{ secrets.DROPLET_IP }}
           username: root
           password: ${{ secrets.DROPLET_PASSWORD }}
-          script: 
+          script: |
             cd /opt/devops-demo-app
             npm install --omit=dev
             # Stop any running instance (|| true prevents failure if none running)
