@@ -1,6 +1,6 @@
 {
   "name": "devops-demo-app",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "A simple web application for demonstrating DevOps concepts",
   "main": "server.js",
   "scripts": {
